@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http //mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ray.flight.dao.RouteMapper">
+
+	<resultMap type="com.ray.flight.entity.Route" id="route">
+		<result column="Id" property="id" />
+		<result column="Airline" property="airline" />
+		<result column="AirlineId" property="airlineId" />
+		<result column="SourceAirport" property="sourceAirport" />
+		<result column="SourceAirportId" property="sourceAirportId" />
+		<result column="DestinationAirport" property="destinationAirport" />
+		<result column="DestinationAirportId" property="destinationAirportId" />
+		<result column="Codeshare" property="codeShare" />
+		<result column="Stops" property="stops" />
+		<result column="Equipment" property="equipments" />
+	</resultMap>
+	
+	<insert id="save" parameterType="com.ray.flight.entity.Route">
+		insert into route(Airline,AirlineId,SourceAirport,SourceAirportId,DestinationAirport,DestinationAirportId,Codeshare,Stops,Equipment) 
+		values(#{airline},#{airlineId},#{sourceAirport},#{sourceAirportId},#{destinationAirport},#{destinationAirportId},#{codeShare},#{stops},#{equipments})
+	</insert>
+	
+	<select id="findRoute" parameterType="com.ray.flight.entity.Route" resultMap="route">
+		select * from route
+	</select>
+	
+	<select id="findRouteSrcToDest" parameterType="com.ray.flight.entity.Route" resultType="long">
+		select count(Id) from route where SourceAirport = #{sourceAirport} and DestinationAirport = #{destinationAirport}
+	</select>
+
+	<select id="averageRouteStops" parameterType="com.ray.flight.entity.Route" resultType="Double">
+		select avg(stops) from route where SourceAirport = #{sourceAirport} and DestinationAirport = #{destinationAirport}
+	</select>
+	
+	<select id="findCountDepartFromSrc" parameterType="com.ray.flight.entity.Route" resultType="Long">
+		select count(Id) from route where SourceAirport = #{sourceAirport}
+	</select>
+	
+	<select id="findRoutesFromSrcToDest" parameterType="com.ray.flight.entity.Route" resultMap="route">
+		select Airline, Stops, Equipment from route where SourceAirport = #{sourceAirport} and DestinationAirport = #{destinationAirport}
+	</select>
+	
+</mapper>
